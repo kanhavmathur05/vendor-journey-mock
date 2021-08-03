@@ -1,0 +1,7 @@
+package com.customerapplicationservice.repositories
+
+import com.customerapplicationservice.modal.CustomerLoanApplication
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+
+interface CustomerLoanApplicationRepo: ReactiveMongoRepository<CustomerLoanApplication,String> {
+}
