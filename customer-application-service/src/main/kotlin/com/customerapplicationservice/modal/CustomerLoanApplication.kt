@@ -5,15 +5,16 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
 data class CustomerLoanApplication(
+
         @Id
-        var id: String?,
+        var id: Int?,
         var contactNumber:Number,
+        var dob: String,
         var loanAmount:Number,
         var emi:Number,
         var tenure:Number,
-        var interestRate: Number,
+        var rateOfInterest: Number,
         var stampDuty: Number,
-        var processingFee: Number,
-        var applicationStatus: Number?
+        var processingFee: Number
         //TODO-Add other details
         )
