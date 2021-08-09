@@ -9,7 +9,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-class CustomerApplicationServiceApplicationTests {
+class CustomerLoanApplicationControllerTests {
 @Autowired
 lateinit var webTestClient: WebTestClient
 
