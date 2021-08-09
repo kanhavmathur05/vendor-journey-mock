@@ -10,8 +10,6 @@ import reactor.core.publisher.Mono
 class CustomerLoanApplicationService(private val customerLoanApplicationRepo: CustomerLoanApplicationRepo) {
 
     fun saveCustomerApplication(customerApplicationDetails: CustomerLoanApplication): Mono<CustomerLoanApplication> {
-        //print(customerApplicationDetails)
-        //customerApplicationDetails.applicationStatus=0
         print(customerApplicationDetails)
         return customerLoanApplicationRepo.save(customerApplicationDetails)
     }

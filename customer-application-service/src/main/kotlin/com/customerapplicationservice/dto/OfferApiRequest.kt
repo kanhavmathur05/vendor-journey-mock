@@ -1,4 +1,8 @@
 package com.customerapplicationservice.dto
 
-class OfferApiRequest {
+data class OfferApiRequest (
+    var contactNumber:Number,
+    var dob: String
+    ){
+
 }
