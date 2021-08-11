@@ -1,5 +1,6 @@
 package com.customerapplicationservice.controllers
 
+import com.customerapplicationservice.dto.ApplicationRequest
 import com.customerapplicationservice.dto.CustomerOffer
 import com.customerapplicationservice.dto.OfferApiRequest
 import com.customerapplicationservice.exceptions.CustomerOfferException
@@ -9,11 +10,13 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
-import java.sql.Date
 
 @RestController
 @CrossOrigin("*")
@@ -40,6 +43,6 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
     @PostMapping("/save-application")
     fun saveCustomerApplication(@RequestBody customerLoanApplicationDetails: CustomerLoanApplication): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.saveCustomerApplication(customerLoanApplicationDetails))
 
-    @GetMapping("/get-application-status/{id}")
-    fun getApplicationStatus(@PathVariable id: String): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.getCustomerLoanApplicationStatus(id))
+    @PostMapping("/get-application-status")
+    fun getApplicationStatus(@RequestBody applicationRequest: ApplicationRequest): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.getCustomerLoanApplicationStatus(applicationRequest.applicationId))
 }
