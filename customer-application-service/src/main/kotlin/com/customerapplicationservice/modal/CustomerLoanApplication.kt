@@ -16,5 +16,5 @@ class CustomerLoanApplication(
         var monthlySalary:String?,
         var city:String?,
         var gender:String?,
-        var applicationStatus:Int?
+        var applicationStatus:String?
         )
