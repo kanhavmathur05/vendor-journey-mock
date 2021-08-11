@@ -4,17 +4,17 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
-data class CustomerLoanApplication(
+class CustomerLoanApplication(
 
         @Id
-        var id: Int?,
-        var contactNumber:Number,
-        var dob: String,
-        var loanAmount:Number,
-        var emi:Number,
-        var tenure:Number,
-        var rateOfInterest: Number,
-        var stampDuty: Number,
-        var processingFee: Number
-        //TODO-Add other details
+        var id: String?,
+        var fullName: String?,
+        var panCard:String?,
+        var email:String?,
+        var employerName:String?,
+        var residentialAddress:String?,
+        var monthlySalary:String?,
+        var city:String?,
+        var gender:String?,
+        var applicationStatus:Int?
         )

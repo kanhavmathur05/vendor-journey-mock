@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono
 import java.sql.Date
 
 @RestController
+@CrossOrigin("*")
 class CustomerLoanApplicationController(private val customerLoanApplicationService: CustomerLoanApplicationService) {
     private  val webClient = WebClient.create("http://localhost:9999")
 
@@ -36,7 +37,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
             .bodyToMono(CustomerOffer::class.java)
     }
 
-    @PostMapping("/save-Offer")
+    @PostMapping("/save-application")
     fun saveCustomerApplication(@RequestBody customerLoanApplicationDetails: CustomerLoanApplication): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.saveCustomerApplication(customerLoanApplicationDetails))
 
     @GetMapping("/get-application-status/{id}")
