@@ -12,7 +12,7 @@ class CustomerOfferException :RuntimeException(){
 fun handleCustomerOfferException(): ResponseEntity<Any> {
     val body: MutableMap<String , Any>  = LinkedHashMap()
     body["message"]="No Offer Found"
-    return ResponseEntity(body,HttpStatus.NOT_FOUND)
+    return ResponseEntity(body,HttpStatus.NO_CONTENT)
 }
 
 }

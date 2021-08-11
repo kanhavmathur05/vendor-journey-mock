@@ -10,11 +10,12 @@ import reactor.core.publisher.Mono
 class CustomerLoanApplicationService(private val customerLoanApplicationRepo: CustomerLoanApplicationRepo) {
 
     fun saveCustomerApplication(customerApplicationDetails: CustomerLoanApplication): Mono<CustomerLoanApplication> {
-        print(customerApplicationDetails)
+        customerApplicationDetails.applicationStatus=1
         return customerLoanApplicationRepo.save(customerApplicationDetails)
     }
 
     fun getCustomerLoanApplicationStatus(id: String): Mono<CustomerLoanApplication> {
+        val obj:Mono<CustomerLoanApplication> = customerLoanApplicationRepo.findById(id)
         return customerLoanApplicationRepo.findById(id);
     }
 
