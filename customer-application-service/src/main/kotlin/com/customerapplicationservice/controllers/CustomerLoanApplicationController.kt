@@ -10,10 +10,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
@@ -27,7 +25,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
     fun getM(@RequestBody offerApiRequest: OfferApiRequest): Mono<CustomerOffer> {
         print(offerApiRequest.contactNumber)
         print(offerApiRequest.dob)
-
+      //  customerLoanApplicationService.checkOffer()
 
         return webClient.post().uri("/offerApi")
             .body(BodyInserters.fromValue(offerApiRequest))
@@ -41,8 +39,19 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
     }
 
     @PostMapping("/save-application")
-    fun saveCustomerApplication(@RequestBody customerLoanApplicationDetails: CustomerLoanApplication): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.saveCustomerApplication(customerLoanApplicationDetails))
+    fun saveCustomerApplication(@RequestBody customerLoanApplicationDetails: CustomerLoanApplication): ResponseEntity<Mono<CustomerLoanApplication>> {
+
+        return  ResponseEntity.ok().body(customerLoanApplicationService.saveCustomerApplication(customerLoanApplicationDetails))
+    }
 
     @PostMapping("/get-application-status")
     fun getApplicationStatus(@RequestBody applicationRequest: ApplicationRequest): ResponseEntity<Mono<CustomerLoanApplication>> = ResponseEntity.ok().body(customerLoanApplicationService.getCustomerLoanApplicationStatus(applicationRequest.applicationId))
+
+    @KafkaListener(topics = ["t4"], groupId = "myGroupId")
+    fun getTopics(e: String) :Unit{
+        println("In pr $e")
+        customerLoanApplicationService.updateApplicationStatus(e);
+       // delayGenerateEvent(e)
+    }
+
 }

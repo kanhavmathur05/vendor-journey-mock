@@ -3,4 +3,7 @@ spring:
     mongodb:
       database: vendor_journey_mockdb
       host: localhost
-#new_sample_db
+
+
+    #new_sample_db
+
