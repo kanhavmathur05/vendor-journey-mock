@@ -22,7 +22,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
     private  val webClient = WebClient.create("http://localhost:9999")
 
     @PostMapping("/check-offer")
-    fun getM(@RequestBody offerApiRequest: OfferApiRequest): Mono<CustomerOffer> {
+    fun getM(@RequestBody offerApiRequest: OfferApiRequest): Mono<Array<CustomerOffer>> {
         print(offerApiRequest.contactNumber)
         print(offerApiRequest.dob)
       //  customerLoanApplicationService.checkOffer()
@@ -35,7 +35,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
             HttpStatus::is4xxClientError){
                 Mono.error(CustomerOfferException())
             }
-            .bodyToMono(CustomerOffer::class.java)
+            .bodyToMono(Array<CustomerOffer>::class.java)
     }
 
     @PostMapping("/save-application")
