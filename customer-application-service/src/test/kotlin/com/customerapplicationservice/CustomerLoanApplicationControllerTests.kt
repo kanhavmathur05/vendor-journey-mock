@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-class CustomerLoanApplicationControllerTests {
+claCustomerLoanApplicationControllerTests {
 @Autowired
 lateinit var webTestClient: WebTestClient
 

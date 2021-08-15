@@ -8,5 +8,6 @@ data class CustomerOffer(
                         var rateOfInterest: Number,
                         var stampDuty: Number,
                         var processingFee: Number,
-                        var netDisbursal:Number
+                        var netDisbursal:Number,
+                        var Bank: String
                         )
