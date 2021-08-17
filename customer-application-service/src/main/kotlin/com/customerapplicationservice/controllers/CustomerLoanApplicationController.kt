@@ -14,6 +14,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
@@ -22,7 +23,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
     private  val webClient = WebClient.create("http://localhost:9999")
 
     @PostMapping("/check-offer")
-    fun getM(@RequestBody offerApiRequest: OfferApiRequest): Mono<Array<CustomerOffer>> {
+    fun getM(@RequestBody offerApiRequest: OfferApiRequest): Flux<CustomerOffer> {
         print(offerApiRequest.contactNumber)
         print(offerApiRequest.dob)
       //  customerLoanApplicationService.checkOffer()
@@ -35,7 +36,7 @@ class CustomerLoanApplicationController(private val customerLoanApplicationServi
             HttpStatus::is4xxClientError){
                 Mono.error(CustomerOfferException())
             }
-            .bodyToMono(Array<CustomerOffer>::class.java)
+            .bodyToFlux(CustomerOffer::class.java)
     }
 
     @PostMapping("/save-application")

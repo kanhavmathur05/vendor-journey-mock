@@ -20,5 +20,13 @@ class CustomerLoanApplication(
         var gender:String?,
         var applicationStatus:String?,
         var employmentType:String?,
-        var addressType:String?
+        var addressType:String?,
+        var bankName: String?,
+        var loanAmount:Number,
+        var emi:Number,
+        var tenure:Number,
+        var rateOfInterest: Number,
+        var stampDuty: Number,
+        var processingFee: Number,
+        var netDisbursal:Number
         )
