@@ -1,4 +1,4 @@
-package com.customerapplicationservice.repositories
+package com.customerapplicationservice.repository
 
 import com.customerapplicationservice.modal.CustomerLoanApplication
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,19 +14,24 @@ class ApplicationUpdateRepo (
     @Autowired
     private  val reactiveMongoOperations: ReactiveMongoOperations
 ){
-    fun updateStatus(id:String): String {
+    fun updateStatus(applicationId:String): String {
 
         val query = Query.query(
-            Criteria.where("id").isEqualTo(id)
+            Criteria.where("id").isEqualTo(applicationId)
         )
-     val c =  reactiveMongoOperations.find(query, CustomerLoanApplication::class.java)
+     val applicationObject =  reactiveMongoOperations.find(query, CustomerLoanApplication::class.java)
 
        val updateStatus = Update().set("applicationStatus", "Approved")
 
-    val upda =  reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
+    /*val upda =  reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
         upda.subscribe()
-        var d = reactiveMongoOperations.find(query,CustomerLoanApplication::class.java)
+       */
+        reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
+            .subscribe()
+
+     /*   var d = reactiveMongoOperations.find(query,CustomerLoanApplication::class.java)
         d.subscribe { a -> print(a.applicationStatus)}
+       */
         return "Approved"
     }
 }

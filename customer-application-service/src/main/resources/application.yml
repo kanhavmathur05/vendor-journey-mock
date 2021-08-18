@@ -1,9 +1,0 @@
-spring:
-  data:
-    mongodb:
-      database: vendor_journey_mockdb
-      host: localhost
-
-
-    #new_sample_db
-
