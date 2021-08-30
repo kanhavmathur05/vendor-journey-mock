@@ -32,8 +32,7 @@ class CustomerLoanApplicationService(
 
     private val logger: Logger = LoggerFactory.getLogger(CustomerLoanApplicationService::class.java)
 
-    private val webClient = WebClient.create("http://localhost:9999")
-
+    private val webClient = WebClient.create("http://5ro53.mocklab.io")
 
     fun getOffers(offerApiRequest:OfferApiRequest): Flux<CustomerOffer> {
 

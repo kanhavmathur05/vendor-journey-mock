@@ -1,0 +1,68 @@
+version: "3"
+services:
+  mymongodb:
+    image: mongo
+    container_name: mymongodb
+    ports:
+      - 27017:27017
+    restart: always
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    restart: always
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper:zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  microservice2:
+    image: microservice2:10.0
+    container_name: microservice2
+    depends_on:
+      - mymongodb
+      - kafka
+      - zookeeper
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - mymongodb
+      - kafka:kafka
+
+  microservice3:
+    image: microservice3:1.0
+    container_name: microservice3
+    depends_on:
+      - mymongodb
+      - kafka
+      - zookeeper
+    restart: always
+    ports:
+      - 8081:8081
+    links:
+      - mymongodb
+      - kafka:kafka
+
+  microservice1:
+    image: microservice1:1.0
+    container_name: microservice1
+    depends_on:
+      - microservice2
+      - microservice3
+    ports:
+      - 3000:3000
+    links:
+      - microservice2
+      - microservice3
