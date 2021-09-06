@@ -21,7 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 
 @Service
-class CustomerLoanApplicationService(
+class CustomerLoanApplicationServiceClass(
     private val customerLoanApplicationRepo: CustomerLoanApplicationRepo
     ,
     private val customerLoanApplicationRepo2:ApplicationUpdateRepo
@@ -30,7 +30,7 @@ class CustomerLoanApplicationService(
     @Autowired
     private val kafkaTemplate: KafkaTemplate<String, String>? = null
 
-    private val logger: Logger = LoggerFactory.getLogger(CustomerLoanApplicationService::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(CustomerLoanApplicationServiceClass::class.java)
 
     private val webClient = WebClient.create("http://5ro53.mocklab.io")
 
@@ -51,10 +51,18 @@ class CustomerLoanApplicationService(
     fun saveCustomerApplication(customerApplicationDetails: CustomerLoanApplication): Mono<CustomerLoanApplication> {
         logger.info("Inside Service - Save Customer Application method" +" " + customerApplicationDetails.fullName + " " + customerApplicationDetails.email + " " + customerApplicationDetails.addressType + " " + customerApplicationDetails.employmentType + " " + customerApplicationDetails.gender + " " + customerApplicationDetails.monthlySalary + " " + customerApplicationDetails.city + " " + customerApplicationDetails.residentialAddress)
         customerApplicationDetails.applicationStatus = "InProgress"
-        return customerLoanApplicationRepo.save(customerApplicationDetails).map { customerLoanApplication ->
+        val savedApplication : Mono<CustomerLoanApplication> = customerLoanApplicationRepo.save(customerApplicationDetails)
+
+        savedApplication.doOnNext { it.id?.let { it1 -> generateDelayEvent(it1) } }.subscribe()
+
+        generateDelayEvent("id")
+        savedApplication.map {
+                customerLoanApplication ->
             generateDelayEvent(customerLoanApplication.id!!)
             customerLoanApplication
-        }
+        }.subscribe()
+
+        return savedApplication
     }
 
     fun generateDelayEvent(applicationId: String) {

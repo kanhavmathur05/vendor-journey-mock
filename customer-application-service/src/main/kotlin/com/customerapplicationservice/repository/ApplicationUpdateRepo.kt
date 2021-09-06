@@ -19,19 +19,20 @@ class ApplicationUpdateRepo (
         val query = Query.query(
             Criteria.where("id").isEqualTo(applicationId)
         )
-     val applicationObject =  reactiveMongoOperations.find(query, CustomerLoanApplication::class.java)
+        val applicationObject =  reactiveMongoOperations.find(query, CustomerLoanApplication::class.java)
 
-       val updateStatus = Update().set("applicationStatus", "Approved")
+        applicationObject.map {
+            if (it.panCard == "ABCD1234A" ){
+                val updateStatus = Update().set("applicationStatus", "Decline")
+                reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
+                    .subscribe()
+            }else{
+                val updateStatus = Update().set("applicationStatus", "Approved")
+                reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
+                    .subscribe()
+            }
+        }.subscribe()
 
-    /*val upda =  reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
-        upda.subscribe()
-       */
-        reactiveMongoOperations.updateFirst(query,updateStatus,CustomerLoanApplication::class.java)
-            .subscribe()
-
-     /*   var d = reactiveMongoOperations.find(query,CustomerLoanApplication::class.java)
-        d.subscribe { a -> print(a.applicationStatus)}
-       */
         return "Approved"
     }
 }

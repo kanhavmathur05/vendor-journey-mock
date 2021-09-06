@@ -3,24 +3,18 @@ package com.customerapplicationservice.controller
 import com.customerapplicationservice.dto.ApplicationRequest
 import com.customerapplicationservice.dto.CustomerOffer
 import com.customerapplicationservice.dto.OfferApiRequest
-import com.customerapplicationservice.exception.CustomerOfferException
 import com.customerapplicationservice.modal.CustomerLoanApplication
-import com.customerapplicationservice.service.CustomerLoanApplicationService
+import com.customerapplicationservice.service.CustomerLoanApplicationServiceClass
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
 @CrossOrigin("*")
-class CustomerLoanApplicationController(private val customerLoanApplicationService: CustomerLoanApplicationService) {
+class CustomerLoanApplicationController(private val customerLoanApplicationService: CustomerLoanApplicationServiceClass) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 

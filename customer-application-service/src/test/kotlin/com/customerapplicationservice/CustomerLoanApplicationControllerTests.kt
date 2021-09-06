@@ -1,136 +1,116 @@
-//package com.customerapplicationservice
-//
-//import com.customerapplicationservice.dto.CustomerOffer
-//import com.customerapplicationservice.dto.OfferApiRequest
-//import org.junit.jupiter.api.Test
-//import org.springframework.beans.factory.annotation.Autowired
-//import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
-//import org.springframework.boot.test.context.SpringBootTest
-//import org.springframework.http.MediaType
-//import org.springframework.test.web.reactive.server.WebTestClient
-//import org.springframework.web.reactive.function.BodyInserters
-//import reactor.core.publisher.Mono
-//
-//@SpringBootTest
-//@AutoConfigureWebTestClient
-//claCustomerLoanApplicationControllerTests {
-//@Autowired
-//lateinit var webTestClient: WebTestClient
-//
-////	@Test
-////	fun getCustomerOfferSuccess(){
-////		webTestClient.get().uri("http://localhost:8080/offerApi/9669935505/1998-09-29").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().is2xxSuccessful.expectBody().json(
-////		"""{"id": null,
-////			"loanAmount": 700000,
-////			"emi": 16100,
-////			"tenure": 5,
-////			"rateOfInterest": 7.6,
-////			"stampDuty": 1500,
-////			"processingFee": 2500,
-////			"netDisbursal:690000"
-////			}"""
-////		)
-////	}
-////
-////	@Test
-////	fun getCustomerOfferFailure(){
-////		webTestClient.get().uri("http://localhost:8080/offerApi/9669935505/1998-09-29").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().is2xxSuccessful.expectBody().json(
-////			"""{"id": null,
-////			"loanAmount": 700000,
-////			"emi": 16100,
-////			"tenure": 5,
-////			"rateOfInterest": 7.6,
-////			"stampDuty": 1500,
-////			"processingFee": 0000}"""
-////		)
-////	}
-//
-//	@Test
-//	fun checkOffer1() {
-////	var customerLoanApplicationController = CustomerLoanApplicationController()
-//
-////	var actualValue = customerLoanApplicationController.getM(OfferApiRequest(9669935505,"1998/09/29"))
-//
-//
-//		//var expected =
-//
-//		/*	Mockito.`when`(webTestClient.post()
-//            .uri("/check-offer")
-//            .body(BodyInserters.fromValue(OfferApiRequest(9669935505,"1998-09-29")))
-//            .accept(MediaType.APPLICATION_JSON)
-//            .exchange()
-//            .expectStatus().isOk
-//            .returnResult(CustomerOffer::class.java)
-//            .responseBody.blockFirst()
-//
-//        ).thenReturn(CustomerOffer(1,1,1,1,1,1,1))
-//
-//    */
-//		webTestClient.post()
-//				.uri("/check-offer")
-//				.body(BodyInserters.fromValue(OfferApiRequest(9669935505,"1998-09-29")))
-//				.accept(MediaType.APPLICATION_JSON)
-//				.exchange()
-//				.expectStatus().isOk
-//				.expectBody().json("""{
-//			"loanAmount": 700000,
-//			"emi": 16100,
-//			"tenure": 5,
-//			"rateOfInterest": 7.6,
-//			"stampDuty": 1500,
-//			"processingFee": 2500,
-//			"netDisbursal":690000
-//			}""")
-//
-//	}
-//	@Test
-//	fun checkOffer2(){
-//		val mono1: WebTestClient.ResponseSpec =
-//				webTestClient.post()
-//						.uri("/check-offer")
-//						.body(BodyInserters.fromValue(OfferApiRequest(966993555505,"1998-09-29")))
-//						.accept(MediaType.APPLICATION_JSON)
-//						.exchange()
-//						.expectStatus().is4xxClientError
-//
-//	}
-//
-//
-//	@Test
-//	fun getOffer(){
-//		val customerOffer: CustomerOffer = CustomerOffer(1,1,1,1,1
-//				,1,1)
-//
-//		val customerOfferMono: Mono<CustomerOffer> = Mono.just<CustomerOffer>(customerOffer)
-//
-//
-//	}
-//
-//	@Test
-//	fun getCustomerOfferSuccess(){
-//		webTestClient.get().uri("http://localhost:8080/offerApi/9669935505/1998-09-29").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().is2xxSuccessful.expectBody().json(
-//				"""{"id": null,
-//			"loanAmount": 700000,
-//			"emi": 16100,
-//			"tenure": 5,
-//			"rateOfInterest": 7.6,
-//			"stampDuty": 1500,
-//			"processingFee": 2500,
-//			"netDisbursal:690000"
-//			}"""
-//		)
-//	}
-//
-//	@Test
-//	fun getCustomerOfferFailure(){
-//		webTestClient.get().uri("http://localhost:8080/offerApi/9669935505/1998-09-29").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().is2xxSuccessful.expectBody().json(
-//				"""{"id": null,
-//			"loanAmount": 700000,
-//			"emi": 16100,
-//			"tenure": 5,
-//			"rateOfInterest": 7.6,
-//			"stampDuty": 1500,
-//			"processingFee": 0000}"""
-//		)
-//	}
-//}
+package com.customerapplicationservice
+
+import com.customerapplicationservice.controller.CustomerLoanApplicationController
+import com.customerapplicationservice.dto.ApplicationRequest
+import com.customerapplicationservice.dto.CustomerOffer
+import com.customerapplicationservice.dto.OfferApiRequest
+import com.customerapplicationservice.modal.CustomerLoanApplication
+import com.customerapplicationservice.service.CustomerLoanApplicationServiceClass
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.ResponseEntity
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+
+@SpringBootTest
+class CustomerLoanApplicationControllerTests {
+
+    private val customerLoanApplicationService = mockk<CustomerLoanApplicationServiceClass>()
+    private val customerLoanApplicationController = CustomerLoanApplicationController(customerLoanApplicationService)
+
+    @Test
+    fun `should return offers for particular user` (){
+
+        var customerOffer : Flux<CustomerOffer> = Flux.just(
+            CustomerOffer(
+                "Axis Bank",
+                "https://download.logo.wine/logo/Axis_Bank/Axis_Bank-Logo.wine.png",
+                16100,
+                12,
+                700000,
+                5,
+                2500,
+                1500,
+                69000
+            ), CustomerOffer(
+                "HDFC Bank",
+                "https://logos-world.net/wp-content/uploads/2020/11/HDFC-Bank-Emblem.png",
+                20000,
+                13,
+                800000,
+                5,
+                3000,
+                2000,
+                75000
+            ),
+            CustomerOffer(
+                "ICICI Bank",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/ICICI_Bank_Logo.svg/1200px-ICICI_Bank_Logo.svg.png",
+                22000,
+                14,
+                850000,
+                5,
+                2800,
+                1900,
+                720000
+            )
+        )
+        val offerApiRequest:OfferApiRequest = OfferApiRequest("9669935505","29-09-1998")
+        every {customerLoanApplicationService.getOffers(OfferApiRequest("9669935505","29-09-1998"))  } returns customerOffer
+        val actualResponse  = customerLoanApplicationController.getOffers(offerApiRequest)
+        Assertions.assertEquals(customerOffer,actualResponse)
+
+    }
+
+    @Test
+    fun `should save customer loan application`(){
+        val applicationObject  = CustomerLoanApplication(
+            "", "Max Johnson", "KJNJKNKJKN", "max@gmail.com", "Google", "6 Chandni Chowk", "20000", "Delhi", "Male", "Initiated", "T", "Residential", "Axis Bank", 1212, 12, 12, 12, 12, 12, 12
+        )
+        val returnedObject = Mono.just(CustomerLoanApplication("someId", "Max Johnson", "KJNJKNKJKN", "max@gmail.com", "Google", "6 Chandni Chowk", "20000", "Delhi", "Male", "Initiated", "T", "Residential", "Axis Bank", 1212, 12, 12, 12, 12, 12, 12)
+        )
+        val expectedResponse = ResponseEntity.ok().body(returnedObject)
+        every { customerLoanApplicationService.saveCustomerApplication(applicationObject) } returns returnedObject
+
+        val actualResult = customerLoanApplicationController.saveCustomerApplication(applicationObject)
+        Assertions.assertEquals(expectedResponse,actualResult)
+    }
+
+    @Test
+    fun `should return application status`(){
+        val id = "1"
+        val applicationResponse:Mono<CustomerLoanApplication> =Mono.just(
+            CustomerLoanApplication(
+                "1",
+                "yash",
+                "HDBPS2323A",
+                "yash@gmail.com",
+                "accenture",
+                "10 shivaji park",
+                "66333",
+                "ujjain",
+                "male",
+                "InProgress",
+                "Business",
+                "Rented(With Family)",
+                "Axis Bank",
+                700000,
+                16100,
+                5,
+                12,
+                1500,
+                2500,
+                690000
+            ))
+        var expectedResponse = ResponseEntity.ok().body(applicationResponse)
+        every { customerLoanApplicationService.getCustomerLoanApplicationStatus(id) } returns applicationResponse
+
+        val actualResponse = customerLoanApplicationController.getApplicationStatus(ApplicationRequest(id))
+
+        Assertions.assertEquals(expectedResponse,actualResponse)
+    }
+
+}
