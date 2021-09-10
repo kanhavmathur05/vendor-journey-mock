@@ -4,13 +4,15 @@ import com.customerapplicationservice.controller.CustomerLoanApplicationControll
 import com.customerapplicationservice.dto.ApplicationRequest
 import com.customerapplicationservice.dto.CustomerOffer
 import com.customerapplicationservice.dto.OfferApiRequest
+import com.customerapplicationservice.exception.CustomerOfferException
 import com.customerapplicationservice.modal.CustomerLoanApplication
-import com.customerapplicationservice.service.CustomerLoanApplicationServiceClass
+import com.customerapplicationservice.service.CustomerLoanApplicationService
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -18,7 +20,7 @@ import reactor.core.publisher.Mono
 @SpringBootTest
 class CustomerLoanApplicationControllerTests {
 
-    private val customerLoanApplicationService = mockk<CustomerLoanApplicationServiceClass>()
+    private val customerLoanApplicationService = mockk<CustomerLoanApplicationService>()
     private val customerLoanApplicationController = CustomerLoanApplicationController(customerLoanApplicationService)
 
     @Test
@@ -112,5 +114,14 @@ class CustomerLoanApplicationControllerTests {
 
         Assertions.assertEquals(expectedResponse,actualResponse)
     }
+    @Test
+    fun `should send exception if no offers exist went wrong`(){
+        var handleCustomerOfferException = CustomerOfferException()
+        val body: MutableMap<String , Any>  = LinkedHashMap()
+        body["message"]="No Offer Found"
+        val expected = ResponseEntity(body, HttpStatus.NO_CONTENT)
 
+        val actualResponse =  handleCustomerOfferException.handleCustomerOfferException()
+        Assertions.assertEquals(expected,actualResponse)
+    }
 }

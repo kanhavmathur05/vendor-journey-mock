@@ -4,7 +4,7 @@ import com.customerapplicationservice.dto.ApplicationRequest
 import com.customerapplicationservice.dto.CustomerOffer
 import com.customerapplicationservice.dto.OfferApiRequest
 import com.customerapplicationservice.modal.CustomerLoanApplication
-import com.customerapplicationservice.service.CustomerLoanApplicationServiceClass
+import com.customerapplicationservice.service.CustomerLoanApplicationService
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.kafka.annotation.KafkaListener
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @CrossOrigin("*")
-class CustomerLoanApplicationController(private val customerLoanApplicationService: CustomerLoanApplicationServiceClass) {
+class CustomerLoanApplicationController(private val customerLoanApplicationService: CustomerLoanApplicationService) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 

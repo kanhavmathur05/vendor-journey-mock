@@ -23,17 +23,11 @@ tasks.jacocoTestReport {
 	classDirectories.setFrom(
 		files(classDirectories.files.map {
 			fileTree(it) {
-				exclude("com/customerapplicationservice/dto**/OfferApiRequest.class",
-					"com/customerapplicationservice/dto**/ApplicationRequest.class",
-					"com/customerapplicationservice/dto**/CustomerOffer.class",
-					"com/customerapplicationservice/repository**/ApplicationUpdateRepo.class",
+				exclude("com/customerapplicationservice/dto**",
+					"com/customerapplicationservice/repository/ApplicationUpdateRepo.class",
 					"com/customerapplicationservice/modal**/CustomerLoanApplication.class",
 					"com/customerapplicationservice/CustomerApplicationServiceApplicationKt.class",
-					"com/customerapplicationservice/CustomerApplicationServiceApplication",
-					"com/customerapplicationservice/exception/**"
-
 				)
-				//		exclude( "/generated/", "/other-excluded/")
 			}
 		})
 	)
